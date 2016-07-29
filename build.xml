@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<project name="webrecs workflow deploy" default="dist-zip" basedir=".">
+	
+	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"/>
+   <property file="../../build.properties"/>
+   <property file="build.properties"/>
+   
+   <property name="project.dir" value="."/>
+   
+	
+   <property name="dist.dir" value="${project.dir}/dist"/>
+   <property name="dest.share" value="${dist.dir}/shared/classes/alfresco/web-extension"/>
+   <property name="dest.alfresco" value="${dist.dir}/shared/classes/alfresco/extension"/>
+   
+   <property name="zip.name" value="webrecs-workflow-5.0.zip"/>
+	<property name="dest.dir" value="hosts.webrecs.com:/home/webrecs/${username}/" />
+	<property name="dest.debug.dir" value="hosts.webrecs.com:/home/webrecs/${username}/debug/" />
+	
+
+	<!-- Clean out the build and distribution directories -->
+	<target name="clean" description="Clean out all build directories">
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${dest.share}" />
+		<mkdir dir="${dest.alfresco}" />
+	</target>
+	
+
+	<!-- Build the debug  ZIP file -->
+	<target name="dist-zip" depends="clean, prepare" description="Build a deployable ZIP file">
+		<copy todir="${dest.share}" flatten="true">
+			<fileset dir="." includes="*/modTarget/share/*" erroronmissingdir="false"/>
+		</copy>
+		<copy todir="${dest.alfresco}" flatten="true">
+			<fileset dir="." includes="*/modTarget/repo/*" erroronmissingdir="false"/>
+		</copy>
+		<xmltask   todir="${dest.share}"  >
+			<fileset dir="${dest.share}" includes="*-config-custom.xml"/>
+	   		<cut path="extension/modules/module/configurations" buffer="saveme"/>
+	   		<remove path="extension/modules/module/id" />
+	   		<remove path="extension/modules/module" />
+	   		<remove path="extension/modules" />
+	   		<remove path="extension" />
+	   		<insert path="/" buffer="saveme"/>
+	   		<rename path="configurations"  to="alfresco-configuration" />
+		</xmltask>		
+		<zip destfile="${dist.dir}/${zip.name}">
+			<zipfileset dir="${dist.dir}"/>
+		</zip>
+	</target>
+	
+
+
+	<target name="build-and-copy-prod-zip" depends="dist-zip" description="Build and copy the production zip to hosting platform" >
+			  <scp todir="${username}:${password}@${dest.dir}">
+		    <fileset dir="${dist.dir}">
+		      <include name="${zip.name}"/>
+		    </fileset>
+		  </scp>
+	</target>
+	
+</project>
+

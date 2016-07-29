@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="signDocument:model">
+    <imports>
+        <import prefix="d" uri="http://www.alfresco.org/model/dictionary/1.0"/>
+        <import prefix="cm" uri="http://www.alfresco.org/model/content/1.0"/>
+        <import prefix="bpm" uri="http://www.alfresco.org/model/bpm/1.0"/>
+    </imports>
+    <namespaces>
+        <namespace prefix="signDocument" uri="http://www.alfresco.org/model/dynamic-workflow/signDocument/1.0"/>
+    </namespaces>
+    <types>
+        <type name="signDocument:signdocument">
+            <parent>bpm:workflowTask</parent>
+            <properties>
+                <property name="signDocument:password">
+                    <type>d:text</type>
+                    <protected>false</protected>
+                    <mandatory>true</mandatory>
+                    <multiple>false</multiple>
+                </property>
+            </properties>
+        </type>
+        <type name="signDocument:start">
+            <parent>bpm:startTask</parent>
+            <overrides>
+                <property name="bpm:packageActionGroup">
+                    <default>add_package_item_actions</default>
+                </property>
+                <property name="bpm:packageItemActionGroup">
+                    <default>edit_and_remove_package_item_actions</default>
+                </property>
+            </overrides>
+            <mandatory-aspects>
+                <aspect>bpm:assignee</aspect>
+            </mandatory-aspects>
+        </type>
+    </types>
+</model>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="signDocument" name="Sign Document" isExecutable="true">
+    <documentation>Sign Document</documentation>
+    <startEvent id="start" activiti:initiator="initiatorUserName" activiti:formKey="signDocument:start">
+      <extensionElements>
+        <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[
+// Check if document is valid
+if (bpm_package.children.length < 1) {
+  throw "Please select a document";
+}
+if (bpm_package.children.length > 1) {
+  throw "You can only select 1 document";
+}
+if (bpm_package.children[0].hasAspect["wr:Signed"]) {
+  throw "The document is already signed";
+}
+]]></activiti:string>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </startEvent>
+    <sequenceFlow id="sequenceFlow1" sourceRef="start" targetRef="userTask1"></sequenceFlow>
+    <userTask id="userTask1" name="Sign Document" activiti:assignee="${bpm_assignee.properties.userName}" activiti:formKey="signDocument:signdocument">
+      <extensionElements>
+        <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[
+if (typeof bpm_workflowDueDate != 'undefined') task.dueDate = bpm_workflowDueDate;
+if (typeof bpm_workflowPriority != 'undefined') task.priority = bpm_workflowPriority;
+
+// Disable reassign button
+task.setVariableLocal("bpm_reassignable" , false);
+
+// Make document read-only
+// doesn't work now if there is a non-inherited rule on the document that gives some user write permission
+if (bpm_package.children.length < 1) {
+  throw "No document found";
+}
+var doc = bpm_package.children[0];
+doc.setInheritsPermissions(false);
+doc.setPermission("Read", "GROUP_EVERYONE");
+execution.setVariable("signDocument_originalOwner", doc.getOwner());
+doc.setOwner("webrecs"); // temporarily set the owner to webrecs so that non-admins don't have write permission
+                         // signer shouldn't be able to edit either because we don't want him/her to manually add aspects
+]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
+        <activiti:taskListener event="complete" class="org.alfresco.webrecs.workflow.signdocument.SignDocumentCompleteListener">
+        </activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <endEvent id="end"></endEvent>
+    <sequenceFlow id="sequenceFlow2" sourceRef="userTask1" targetRef="end"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_signDocument">
+    <bpmndi:BPMNPlane bpmnElement="signDocument" id="BPMNPlane_signDocument">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="0.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="30.0" width="30.0" x="230.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userTask1" id="BPMNShape_userTask1">
+        <omgdc:Bounds height="60.0" width="100.0" x="80.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow1" id="BPMNEdge_sequenceFlow1">
+        <omgdi:waypoint x="30.0" y="30.0"></omgdi:waypoint>
+        <omgdi:waypoint x="42.0" y="30.0"></omgdi:waypoint>
+        <omgdi:waypoint x="42.0" y="30.000000000000007"></omgdi:waypoint>
+        <omgdi:waypoint x="80.0" y="30.000000000000007"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow2" id="BPMNEdge_sequenceFlow2">
+        <omgdi:waypoint x="180.0" y="30.0"></omgdi:waypoint>
+        <omgdi:waypoint x="192.0" y="30.0"></omgdi:waypoint>
+        <omgdi:waypoint x="192.0" y="30.000000000000004"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="30.000000000000004"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
