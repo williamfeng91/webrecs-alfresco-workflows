@@ -43,12 +43,16 @@
                 </field-visibility>
                 <appearance>
                     <set appearance="title" label-id="Request Signature" id="info"/>
-                    <field set="info" label-id="workflow.field.assign_to" id="bpm:assignee"/>
+                    <field set="info" label-id="workflow.field.assign_to" id="bpm:assignee">
+	                  	<control template="/org/webrecs/components/form/controls/workflow/wr-authority.ftl" />
+                    </field>
                     <field set="info" label-id="workflow.field.message" id="bpm:workflowDescription">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
                     </field>
                     <set appearance="title" label-id="Document" id="document"/>
-                    <field set="document" id="packageItems"/>
+                    <field set="document" id="packageItems">
+                         <control template="/org/webrecs/components/form/controls/workflow/wr-packageitems.ftl" />
+                    </field>
                     <set id="response"/>
                     <field set="response" id="transitions"/>
                 </appearance>
@@ -66,12 +70,16 @@
                 </field-visibility>
                 <appearance>
                     <set appearance="title" label-id="Request Signature" id="info"/>
-                    <field set="info" label-id="workflow.field.assign_to" id="bpm:assignee"/>
+                    <field set="info" label-id="workflow.field.assign_to" id="bpm:assignee">
+	                  	<control template="/org/webrecs/components/form/controls/workflow/wr-authority.ftl" />
+                    </field>
                     <field set="info" label-id="workflow.field.message" id="bpm:workflowDescription">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
                     </field>
                     <set appearance="title" label-id="Document" id="document"/>
-                    <field set="document" id="packageItems"/>
+                    <field set="document" id="packageItems">
+                         <control template="/org/webrecs/components/form/controls/workflow/wr-packageitems.ftl" />
+                    </field>
                     <set id="response"/>
                     <field set="response" id="transitions"/>
                 </appearance>
