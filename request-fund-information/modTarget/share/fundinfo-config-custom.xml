@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<extension>
+    <modules>
+        <module>
+            <id>kickstart_form_fundinfo</id>
+            <configurations>
+                <config condition="fundinfo:reviewstep" evaluator="task-type">
+                    <forms>
+                        <form>
+                            <field-visibility>
+                                <show id="fundinfo:siteTitle"/>
+                                <show id="bpm:siteName"/>
+                                <show id="fundinfo:comment"/>
+                                <show id="packageItems"/>
+                                <show id="bpm:comment"/>
+                                <show id="fundinfo:reviewOutcome"/>
+                            </field-visibility>
+                            <appearance>
+                                <set template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="Request more info or complete workflow" id="info"/>
+                                <field set="info" label-id="Fund" id="fundinfo:siteTitle">
+                                    <control template="/org/alfresco/components/form/controls/info.ftl"/>
+                                </field>
+                                <set id="siteName"/>
+                                <field set="siteName" label-id="Fund ID" id="bpm:siteName">
+                                    <control template="/org/alfresco/components/form/controls/info.ftl"/>
+                                </field>
+                                <set appearance="title" label-id="Messages" id="messages"/>
+                                <field set="messages" label-id="Message" id="fundinfo:comment" read-only="true">
+                                    <control template="/org/webrecs/components/form/controls/wr-textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                <set appearance="title" label-id="Documents" id="documents"/>
+                                <field set="documents" id="packageItems" help="Select documents from the fund document store or drag and drop them from your computer">
+                                    <control template="/org/webrecs/components/form/controls/workflow/wr-packageitems.ftl">
+                                        <control-param name="dragndrop">true</control-param>
+                                        <control-param name="sitePath">/Mailroom</control-param>
+                                    </control>
+                                </field>
+                                <set appearance="title" label-id="Further comments" id="comments"/>
+                                <field set="comments" label-id="workflow.field.comment" id="bpm:comment">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                <set id="response"/>
+                                <field set="response" id="fundinfo:reviewOutcome">
+                                    <control template="/org/alfresco/components/form/controls/workflow/activiti-transitions.ftl"/>
+                                </field>
+                            </appearance>
+                        </form>
+                    </forms>
+                </config>
+                <config condition="fundinfo:queryresponse" evaluator="task-type">
+                    <forms>
+                        <form>
+                            <field-visibility>
+                                <show id="fundinfo:siteTitle"/>
+                                <show id="bpm:siteName"/>
+                                <show id="fundinfo:comment"/>
+                                <show id="packageItems"/>
+                                <show id="bpm:comment"/>
+               					<show id="transitions" />
+                                
+                            </field-visibility>
+                            <appearance>
+                                <set template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="Respond to queries" id="info"/>
+                                <field set="info" label-id="Fund" id="fundinfo:siteTitle">
+                                    <control template="/org/alfresco/components/form/controls/info.ftl"/>
+                                </field>
+                                <field set="info" label-id="Fund ID" id="bpm:siteName">
+                                    <control template="/org/alfresco/components/form/controls/info.ftl"/>
+                                </field>
+                                <set appearance="title" label-id="Messages" id="messages"/>
+                                <field set="messages" label-id="Message" id="fundinfo:comment" read-only="true">
+                                    <control template="/org/webrecs/components/form/controls/wr-textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                 <set appearance="title" label-id="Documents" id="documents"/>
+                                <field set="documents" id="packageItems" help="Select documents from the fund document store or drag and drop them from your computer">
+                                    <control template="/org/webrecs/components/form/controls/workflow/wr-packageitems.ftl">
+                                        <control-param name="dragndrop">true</control-param>
+                                        <control-param name="sitePath">/Mailroom</control-param>
+                                    </control>
+                                </field>
+                                <set appearance="title" label-id="Reply to query" id="comments"  help="Add your reply. You can use newlines"/>
+                                <field set="comments" label-id="workflow.field.comment" id="bpm:comment">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                <set id="response" appearance="title" label-id="workflow.set.response" />
+                                <field id="transitions" set="response" />
+                                
+                             </appearance>
+                        </form>
+                    </forms>
+                </config>
+                <config condition="activiti$fundinfo" evaluator="string-compare"><!-- this is what is used when starting the workflow  -->
+                    <forms>
+                        <form>
+                            <field-visibility>
+                                <show id="bpm:siteName"/>
+                                <show id="fundinfo:assignee"/>
+                                <show id="fundinfo:groupAssignee"/>
+                                <show id="fundinfo:remindAfter"/>
+                                <show id="fundinfo:remindRepeat"/>
+                                <show id="packageItems"/>
+                                <show id="bpm:comment"/>
+
+                                
+                            </field-visibility>
+                            <appearance>
+                                <set template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="Request information for fund" id="fund"  />
+                                <field  set="fund"  label-id="Fund" id="bpm:siteName">
+                                      <control template="/org/webrecs/components/form/controls/wr-selectone-from-webscript.ftl">
+                                        <control-param name="ds">/share/proxy/alfresco/webrecs/fundsearcher?query=$site&amp;minLength=0&amp;maxItems=500</control-param>
+                                        <control-param name="resultsList">nodes</control-param>
+                                        <control-param name="nameField">title</control-param>
+                                        <control-param name="valueField">name</control-param>
+                                        <control-param name="default">Alfresco.constants.SITE</control-param>
+                                    </control> 
+                                </field>
+                                <field id="fundinfo:groupAssignee" label-id="Group" set="fund" help="(Optional)Select the group if you don't want the default"/>
+                                 <set template="/org/alfresco/components/form/3-column-set.ftl" appearance="title" label-id="(Optional) recipient override  and reminder email config" id="optional"  />
+                                <field id="fundinfo:assignee" label-id="Recipient" set="optional"  help="(Optional)Select the recipient if you don't want a group"/>
+                                <field id="fundinfo:remindAfter" set="optional" label="Number of days before reminder sent" help="After this many days, send a reminder. 0 means no reminders sent"/>
+                                <field id="fundinfo:remindRepeat" set="optional" label="Number of repeat reminders to send" help="How many times to repeat the reminder. 0 means no repeats ie.send one reminder"/>
+                                 <set appearance="title" label-id="Documents" id="documents"  />
+                                <field set="documents" id="packageItems" help="Select documents from the fund document store or drag and drop them from your computer">
+                                    <control template="/org/webrecs/components/form/controls/workflow/wr-packageitems-dependant.ftl">
+                                        <control-param name="dependantOn">prop_bpm_siteName</control-param>
+                                        <control-param name="dragndrop">true</control-param>
+                                        <control-param name="sitePath">/Mailroom</control-param>
+                                    </control>
+                                </field>
+                               <set appearance="title" label-id="Information needed" id="comments" />
+                                <field set="comments" label-id="workflow.field.comment" id="bpm:comment" help="Add instructions. You can use newlines">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                             </appearance>
+                        </form>
+                    </forms>
+                </config>
+                
+                 <config condition="fundinfo:startTask" evaluator="task-type"> <!-- this is what is displayed in the workflow-details form  -->
+                    <forms>
+                        <form>
+                            <field-visibility>
+                                <show id="bpm:siteName"/>
+                                <show id="fundinfo:assignee"/>
+                                <show id="fundinfo:groupAssignee"/>
+                                <show id="packageItems"/>
+                                <show id="bpm:comment"/>
+                            </field-visibility>
+                            <appearance>
+                                <set appearance="title" id="info" label-id="Start task details" template="/org/alfresco/components/form/3-column-set.ftl" />
+                                <set appearance="title" id="other" label-id="workflow.set.other"/>
+                                <field id="bpm:siteName" label-id="Fund" set="info" />
+                                <field id="fundinfo:assignee" label-id="Recipient" set="info" />
+                                <field id="fundinfo:groupAssignee" label-id="Group" set="info" />
+                                
+                                <field id="bpm:comment" label-id="workflow.field.comment" set="info">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                <set appearance="title" id="documents" label-id="Workflow Documents"/>
+                                <field id="packageItems" set="documents">
+                                    
+                                </field>
+                            </appearance>
+                        </form>
+                    </forms>
+                </config>
+                
+                
+				<config evaluator="string-compare" condition="Workflow">
+				    <hidden-workflows>
+				        <workflow name="activiti$activitiInvitationModerated"/>
+				    </hidden-workflows>
+				</config>
+				<config evaluator="string-compare" condition="Workflow">
+				    <hidden-workflows>
+				        <workflow name="activiti$activitiInvitationNominated"/>
+				    </hidden-workflows>
+				</config>
+				<config evaluator="string-compare" condition="Workflow">
+				    <hidden-workflows>
+				        <workflow name="activiti$activitiParallelGroupReview"/>
+				    </hidden-workflows>
+				</config>
+				<config evaluator="string-compare" condition="Workflow">
+				    <hidden-workflows>
+				        <workflow name="activiti$activitiParallelReview"/>
+				    </hidden-workflows>
+				</config>
+				<config evaluator="string-compare" condition="Workflow">
+				    <hidden-workflows>
+				        <workflow name="activiti$activitiReview"/>
+				    </hidden-workflows>
+				</config>
+				<config evaluator="string-compare" condition="Workflow">
+				    <hidden-workflows>
+				        <workflow name="activiti$activitiReviewPooled"/>
+				    </hidden-workflows>
+				</config>
+				<config evaluator="string-compare" condition="Workflow">
+				    <hidden-workflows>
+				        <workflow name="activiti$publishWebContent"/>
+				    </hidden-workflows>
+				</config>
+             </configurations>
+        </module>
+    </modules>
+</extension>

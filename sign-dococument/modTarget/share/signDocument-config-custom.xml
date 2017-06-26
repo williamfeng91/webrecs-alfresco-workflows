@@ -8,6 +8,8 @@
                     <show id="packageItems"/>
                     <show id="signDocument:password"/>
                     <show id="transitions"/>
+                    <show id="bpm:siteName" force="true" />
+                    
                 </field-visibility>
                 <appearance>
                     <set appearance="title" label-id="Sign Document" id="info"/>
@@ -28,6 +30,11 @@
                             <control-param name="options">Next|Sign</control-param>
                         </control>
                     </field>
+                    <field id="bpm:siteName">
+                         <control template="/org/webrecs/components/form/controls/workflow/wr-site.ftl"/>
+                    </field>
+
+                    
                 </appearance>
             </form>
         </forms>
@@ -40,6 +47,8 @@
                     <show id="bpm:workflowDescription"/>
                     <show id="packageItems"/>
                     <show id="transitions"/>
+                    <show id="bpm:siteName" force="true" />
+                    
                 </field-visibility>
                 <appearance>
                     <set appearance="title" label-id="Request Signature" id="info"/>
@@ -55,6 +64,9 @@
                     </field>
                     <set id="response"/>
                     <field set="response" id="transitions"/>
+                     <field id="bpm:siteName">
+                         <control template="/org/webrecs/components/form/controls/workflow/wr-site.ftl"/>
+                    </field>
                 </appearance>
             </form>
         </forms>
@@ -67,6 +79,7 @@
                     <show id="bpm:workflowDescription"/>
                     <show id="packageItems"/>
                     <show id="transitions"/>
+                    <show id="bpm:siteName" force="true" />
                 </field-visibility>
                 <appearance>
                     <set appearance="title" label-id="Request Signature" id="info"/>
@@ -82,6 +95,9 @@
                     </field>
                     <set id="response"/>
                     <field set="response" id="transitions"/>
+                     <field id="bpm:siteName">
+                         <control template="/org/webrecs/components/form/controls/workflow/wr-site.ftl"/>
+                    </field>
                 </appearance>
             </form>
         </forms>
