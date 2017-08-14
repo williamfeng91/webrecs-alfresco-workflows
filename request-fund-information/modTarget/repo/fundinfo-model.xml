@@ -41,7 +41,8 @@
         		<aspect>fundinfo:assignee</aspect>
         		<aspect>fundinfo:groupAssignee</aspect>
         		<aspect>fundinfo:remindAfter</aspect>
-        		<aspect>fundinfo:remindRepeat</aspect>
+                <aspect>fundinfo:remindRepeat</aspect>
+                <aspect>fundinfo:workflowDesc</aspect>
             </mandatory-aspects>
         </type>
         
@@ -180,6 +181,15 @@
                 </property>
             </properties>
         </aspect>  
+        
+        <aspect name="fundinfo:workflowDesc">
+            <properties>
+                <property name="fundinfo:workflowDesc">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+        
         
     </aspects>
 </model>

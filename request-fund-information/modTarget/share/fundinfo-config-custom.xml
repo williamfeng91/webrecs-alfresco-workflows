@@ -103,6 +103,7 @@
                             <field-visibility>
                                 <show id="bpm:siteName"/>
                                 <show id="fundinfo:assignee"/>
+                                <show id="fundinfo:workflowDesc"/>
                                 <show id="fundinfo:groupAssignee"/>
                                 <show id="fundinfo:remindAfter"/>
                                 <show id="fundinfo:remindRepeat"/>
@@ -123,6 +124,7 @@
                                     </control> 
                                 </field>
                                 <field id="fundinfo:groupAssignee" label-id="Group" set="fund" help="(Optional)Select the group if you don't want the default"/>
+                                <field id="fundinfo:workflowDesc" label-id="(Optional) Description" set="fund" />
                                  <set template="/org/alfresco/components/form/3-column-set.ftl" appearance="title" label-id="(Optional) recipient override  and reminder email config" id="optional"  />
                                 <field id="fundinfo:assignee" label-id="Recipient" set="optional"  help="(Optional)Select the recipient if you don't want a group"/>
                                 <field id="fundinfo:remindAfter" set="optional" label="Number of days before reminder sent" help="After this many days, send a reminder. 0 means no reminders sent"/>

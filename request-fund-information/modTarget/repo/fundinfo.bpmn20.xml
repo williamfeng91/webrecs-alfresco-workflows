@@ -18,7 +18,8 @@ execution.setVariable("processStatus", "Not Started");
 execution.setVariable("fundinfo_adminid",   initiator.properties.userName);
 var site = siteService.getSite(bpm_siteName);
 execution.setVariable("fundinfo_siteTitle", site.title);
-var taskName = "Queries for fund " + site.title;
+var taskName = (typeof fundinfo_workflowDesc !== 'undefined' && fundinfo_workflowDesc !== "" ) ? fundinfo_workflowDesc 
+                                                                                                                                                                                  : "Queries for fund " + site.title;
 execution.setVariable('bpm_workflowDescription', taskName);
 var ownerid=(typeof fundinfo_assignee !== 'undefined' && fundinfo_assignee !== "" )
                         ?fundinfo_assignee.properties.userName :"";
