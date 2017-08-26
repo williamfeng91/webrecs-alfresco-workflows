@@ -6,7 +6,8 @@
       <extensionElements>
         <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
           <activiti:field name="script">
-            <activiti:string><![CDATA[logger.log("User fund query start form: Running initialise step. Fund is " + bpm_siteName + ", initiator is " + initiator.properties.userName);
+            <activiti:string><![CDATA[<import resource="classpath:/alfresco/extension/webrecs_workflow_lib.js">
+logger.log("User fund query start form: Running initialise step. Fund is " + bpm_siteName + ", initiator is " + initiator.properties.userName);
 execution.setVariable('fundinfo_comment', bpm_comment);
 execution.setVariable("bpm_reassignable" , false);
 //execution.setVariable('bpm_comment', "");
@@ -36,28 +37,16 @@ if (customergroup)  {
                     logger.log("User fund query start form : group " +customergroup + " does not exist");
                      execution.setVariable ('fundinfo_customergroup', "" );
              } else {
-                     execution.setVariable ('fundinfo_customergroup', customergroup );                    
-                     var members = people.getMembers(groupNode, false);
-                     if (members == null || members.length == 0) {
-                                logger.log("User fund query start form: no members in group " +customergroup);
-                      }else{
-                           for ( i=0; i < members.length; i++ ){
-                                var member=members[i];
-                                logger.log("User fund query start form: looking at props for " + member.properties.userName);
-                                if (member.properties.jobtitle && member.properties.jobtitle.toLowerCase().indexOf("fund primary") != -1) {
-                            		owner=member;
-                            		break;
-                            	}
-                            }
-                      }        
+                     execution.setVariable ('fundinfo_customergroup', customergroup );         
+			owner=getAssigneeFromGroup ( customergroup, "fund primary" );
              }
 }
 if ( ownerid !=""  ) 
     execution.setVariable('fundinfo_ownerid', ownerid);
 else {
 	if (owner) {
-        logger.log("User fund query start form: owner=" + owner.properties.userName);
-        execution.setVariable ("fundinfo_ownerid", owner.properties.userName );
+        logger.log("User fund query start form: owner=" + owner);
+        execution.setVariable ("fundinfo_ownerid", owner );
        }else
     	      throw ("Cannot determine who to send this request to");
 }]]></activiti:string>
