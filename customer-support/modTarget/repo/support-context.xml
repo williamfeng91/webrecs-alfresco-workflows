@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+    <bean parent="workflowDeployer" id="support.workflowBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/extension/support-model.xml</value>
+            </list>
+        </property>
+        <property name="workflowDefinitions">
+            <props>
+                <prop key="engineId">activiti</prop>
+                <prop key="mimeType">text/xml</prop>
+                <prop key="location">alfresco/extension/support.bpmn20.xml</prop>
+                <prop key="redeploy">true</prop>
+            </props>
+        </property>
+		<property name="labels">
+			<list>
+				<value>alfresco/extension/support-messages</value>
+			</list>
+		</property>
+    </bean>
+</beans>

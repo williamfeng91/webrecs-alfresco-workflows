@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="supp:model">
+    <imports>
+        <import prefix="d" uri="http://www.alfresco.org/model/dictionary/1.0"/>
+        <import prefix="cm" uri="http://www.alfresco.org/model/content/1.0"/>
+        <import prefix="bpm" uri="http://www.alfresco.org/model/bpm/1.0"/>
+    </imports>
+    <namespaces>
+        <namespace prefix="supp" uri="http://www.alfresco.org/model/dynamic-workflow/support/1.0"/>
+    </namespaces>
+    <constraints>
+        <constraint type="LIST" name="supp:reviewOutcomeList">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Respond</value>
+                    <value>Close</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
+    
+     <types>
+        <type name="supp:suppresponse">
+            <parent>bpm:activitiOutcomeTask</parent>
+             <properties>
+                <property name="supp:reviewOutcome">
+                    <type>d:text</type>
+                    <constraints>
+                        <constraint ref="supp:reviewOutcomeList"/>
+                    </constraints>
+                </property>
+            </properties>
+            <overrides>
+                <property name="bpm:packageActionGroup">
+                    <default>add_package_item_actions</default>
+                </property>
+                <property name="bpm:packageItemActionGroup">
+                    <default>edit_and_remove_package_item_actions</default>
+                </property>
+                 <property name="bpm:outcomePropertyName">
+                    <default>{http://www.alfresco.org/model/dynamic-workflow/support/1.0}reviewOutcome</default>
+                </property>
+            </overrides>
+            <mandatory-aspects>
+                <aspect>supp:comment</aspect>
+                <aspect>supp:mailDocs</aspect>
+                <aspect>supp:mailDoc</aspect>
+                <aspect>supp:suppAttachments</aspect>
+                <aspect>supp:allAttachments</aspect>
+            </mandatory-aspects>
+        </type>
+        
+        <type name="supp:startTask">
+            <parent>bpm:startTask</parent>
+            <mandatory-aspects>
+                <aspect>supp:custRemindAfter</aspect>
+                <aspect>supp:custRemindRepeat</aspect>
+                <aspect>supp:suppRemindAfter</aspect>
+                <aspect>supp:suppRemindRepeat</aspect>
+                <aspect>supp:workflowDesc</aspect>
+                <aspect>supp:customeremail</aspect>
+                <aspect>supp:mailDoc</aspect>
+                <aspect>supp:allAttachments</aspect>
+                
+            </mandatory-aspects>
+        </type>
+        
+        <type name="supp:custresponse">
+            <parent>bpm:activitiOutcomeTask</parent>
+            <overrides>
+                <property name="bpm:packageActionGroup">
+                    <default>add_package_item_actions</default>
+                </property>
+                <property name="bpm:packageItemActionGroup">
+                    <default>edit_and_remove_package_item_actions</default>
+                </property>
+            </overrides>
+            <mandatory-aspects>
+                <aspect>supp:comment</aspect>
+                <aspect>supp:mailDocs</aspect>
+                <aspect>supp:mailDoc</aspect>
+                <aspect>supp:allAttachments</aspect>
+            </mandatory-aspects>
+        </type>
+        
+    </types>
+    <aspects>
+        <aspect name="supp:comment">
+            <properties>
+                <property name="supp:comment">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+
+        <aspect name="supp:suppRemindAfter">
+            <properties>
+                <property name="supp:suppRemindAfter">
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+            </properties>
+        </aspect>
+        
+         <aspect name="supp:suppRemindRepeat">
+            <properties>
+                <property name="supp:suppRemindRepeat">
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+            </properties>
+        </aspect>  
+        
+        <aspect name="supp:custRemindAfter">
+            <properties>
+                <property name="supp:custRemindAfter">
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+            </properties>
+        </aspect>
+        
+         <aspect name="supp:custRemindRepeat">
+            <properties>
+                <property name="supp:custRemindRepeat">
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+            </properties>
+        </aspect>  
+
+        <aspect name="supp:workflowDesc">
+            <properties>
+                <property name="supp:workflowDesc">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+        
+        <aspect name="supp:mailDocs">
+             <properties>
+                <property name="supp:mailDocsHtml">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <associations>
+                <association name="supp:mailDocs">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>        
+        
+        <aspect name="supp:mailDoc">
+            <associations>
+                <association name="supp:mailDoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>       
+        
+        <aspect name="supp:suppAttachments">
+             <properties>
+                <property name="supp:suppAttachmentsHtml">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <associations>
+                <association name="supp:suppAttachments">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+         
+        <aspect name="supp:allAttachments">
+             <properties>
+                <property name="supp:allAttachmentsHtml">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <associations>
+                <association name="supp:allAttachments">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+
+        <aspect name="supp:mailsHtml">
+            <properties>
+                <property name="supp:mailsHtml">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+         
+        <aspect name="supp:customeremail">
+            <properties>
+                <property name="supp:customeremail">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+        
+        
+    </aspects>
+</model>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<extension>
+    <modules>
+        <module>
+            <id>kickstart_form_supp</id>
+            <configurations>
+                <config condition="supp:suppresponse" evaluator="task-type">
+                    <forms>
+                        <form>
+                            <field-visibility>
+                                <show id="supp:mailDocs" />
+                                <show id="supp:mailDocsHtml" />
+                                <show id="supp:comment"/>
+                                <show id="bpm:comment"/>
+                                <show id="supp:suppAttachments" />
+                                <show id="supp:allAttachments" />
+                                <show id="supp:allAttachmentsHtml" />
+                                <show id="supp:reviewOutcome"/>
+                            </field-visibility>
+                            <appearance>
+                                <set appearance="title" label-id="Messages" id="messages"/>
+                                <set appearance="title" label-id="Documents" id="documents"/>
+                                <set appearance="title" label-id="Response" id="comments"/>
+                                
+                                <field id="supp:allAttachments"  ><control template="/org/alfresco/components/form/controls/invisible.ftl" /></field>
+                                <field id="supp:mailDocs"  ><control template="/org/alfresco/components/form/controls/invisible.ftl" /></field>
+                                <field set="messages" label-id="Message" id="supp:comment" read-only="true">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                <field set="comments" label-id="workflow.field.comment" id="bpm:comment">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                 <field set="documents" id="supp:mailDocsHtml" label-id="Mail header documents">
+                                    <control template="/org/webrecs/components/form/controls/wr-info-with-links.ftl">
+                                        <control-param name="straightHtml">true</control-param>
+                                    </control>
+                                </field>
+                                <field set="documents" id="supp:allAttachmentsHtml" label-id="All attachments">
+                                    <control template="/org/webrecs/components/form/controls/wr-info-with-links.ftl">
+                                        <control-param name="straightHtml">true</control-param>
+                                    </control>
+                                </field>
+                                <field id="supp:suppAttachments" set="documents"  help="Drag and drop attachments doc" label-id="Drag and drop attachments">
+                                    <control template="/org/webrecs/components/form/controls/workflow/wr-packageitems.ftl">
+                                        <control-param name="dependantOn">prop_bpm_siteName</control-param>
+                                        <control-param name="dragndrop">true</control-param>
+                                        <control-param name="sitePath">/Mailroom</control-param>
+                                    </control>
+                                </field>
+                                <set id="response"/>
+                                <field set="response" id="supp:reviewOutcome">
+                                    <control template="/org/alfresco/components/form/controls/workflow/activiti-transitions.ftl"/>
+                                </field>
+                            </appearance>
+                        </form>
+                    </forms>
+                </config>
+                
+                <config condition="supp:custresponse" evaluator="task-type">
+                    <forms>
+                        <form>
+                            <field-visibility>
+                                <show id="supp:mailDocs" />
+                                <show id="supp:mailDoc" />
+                                <show id="supp:comment"/>
+                                 <show id="bpm:comment"/>
+                                <show id="supp:allAttachments" />
+                                <show id="transitions" />
+                                
+                            </field-visibility>
+                            <appearance>
+                               <set appearance="title" label-id="Messages" id="messages"/>
+                                <field set="messages" label-id="Message" id="supp:comment" read-only="true">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                <set appearance="title" label-id="All attachments" id="documents"/>
+                                <field set="documents" id="supp:allAttachments" label-id="All attachments">
+                                    <control template="/org/webrecs/components/form/controls/wr-info-with-links.ftl">
+                                        <control-param name="straightHtml">true</control-param>
+                                    </control>
+                                </field>
+                                 <set appearance="title" label-id="Response" id="comments"/>
+                                <field set="comments" label-id="workflow.field.comment" id="bpm:comment">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                <set id="response" appearance="title" label-id="workflow.set.response" />
+                                <field id="transitions" set="response" />
+                                
+                             </appearance>
+                        </form>
+                    </forms>
+                </config>
+                <config condition="activiti$supp" evaluator="string-compare"><!-- this is what is used when starting the workflow  -->
+                    <forms>
+                        <form>
+                            <field-visibility>
+                                <show id="supp:workflowDesc"/>
+                                <show id="supp:customeremail" />
+                                <show id="supp:custRemindAfter"/>
+                                <show id="supp:custRemindRepeat"/>
+                                <show id="supp:suppRemindAfter"/>
+                                <show id="supp:suppRemindRepeat"/>
+                                <show id="supp:mailDoc" />
+                                <show id="supp:mailDocs" />
+                                <show id="supp:allAttachments" />
+                                <show id="bpm:comment"/>
+                                
+
+                                
+                            </field-visibility>
+                            <appearance>
+                                 <set template="/org/alfresco/components/form/3-column-set.ftl" appearance="title" label-id="(Optional) Reminder email config" id="optional"  />
+                                <field id="supp:workflowDesc" label-id="(Optional) Description" set="optional" />
+                                <field id="supp:customeremail" label-id="(Optional) Customer email. Default initiator email " set="optional" />
+                                <field id="supp:custRemindAfter" set="optional" label="Number of days before reminder sent to customer" help="After this many days, send a reminder. 0 means no reminders sent"/>
+                                <field id="supp:custRemindRepeat" set="optional" label="Number of repeat reminders to send to customer" help="How many times to repeat the reminder. 0 means no repeats ie.send one reminder"/>
+                                <field id="supp:suppRemindAfter" set="optional" label="Number of days before reminder sent to support" help="After this many days, send a reminder. 0 means no reminders sent"/>
+                                <field id="supp:suppRemindRepeat" set="optional" label="Number of repeat reminders to send to support" help="How many times to repeat the reminder. 0 means no repeats ie.send one reminder"/>
+                                <set appearance="title" label-id="Documents" id="documents"  />
+                                <field id="supp:mailDoc" set="documents"  help="Drag and drop email doc" label-id="Drag and drop email doc">
+                                    <control template="/org/webrecs/components/form/controls/workflow/wr-packageitems.ftl">
+                                        <control-param name="dependantOn">prop_bpm_siteName</control-param>
+                                        <control-param name="dragndrop">true</control-param>
+                                        <control-param name="sitePath">/Mailroom</control-param>
+                                    </control>
+                                </field>
+                               <set appearance="title" label-id="Comments or email content" id="comments" />
+                                <field set="comments" label-id="workflow.field.comment" id="bpm:comment" help="Add reply You can use newlines">
+                                    <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                                        <control-param name="rows">5</control-param>
+                                    </control>
+                                </field>
+                                <set appearance="title" label-id="Documents" id="documents"/>
+                                <field set="documents" id="supp:allAttachments">
+                                    <control template="/org/webrecs/components/form/controls/workflow/wr-packageitems.ftl">
+                                    </control>
+                                </field>
+                                
+                                
+                             </appearance>
+                        </form>
+                    </forms>
+                </config>
+                
+                 <config condition="supp:startTask" evaluator="task-type"> <!-- this is what is displayed in the workflow-details form  -->
+                    <forms>
+                        <form>
+                             <field-visibility>
+                                <show id="packageItems"/>
+                            </field-visibility>
+                            <appearance>
+                                 <set appearance="title" id="documents" label-id="Workflow Documents"/>
+                                <field id="packageItems" set="documents">
+                                    
+                                </field>
+                            </appearance>
+                        </form>
+                    </forms>
+                </config>
+                
+                
+				<config evaluator="string-compare" condition="Workflow">
+				    <hidden-workflows>
+				        <workflow name="activiti$supp"/>
+				    </hidden-workflows>
+				</config>
+             </configurations>
+        </module>
+    </modules>
+</extension>
