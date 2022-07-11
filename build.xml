@@ -13,7 +13,8 @@
    <property name="dest.share" value="${dist.dir}/shared/classes/alfresco/web-extension"/>
    <property name="dest.alfresco" value="${dist.dir}/shared/classes/alfresco/extension"/>
    
-   <property name="zip.name" value="webrecs-workflow-5.0.zip"/>
+	   <property name="zip.name.share" value="webrecs-workflow-share.zip"/>
+	   <property name="zip.name.alfresco" value="webrecs-workflow-alfresco.zip"/>
 	<property name="dest.dir" value="hosts.webrecs.com:/home/webrecs/${username}/" />
 	<property name="dest.debug.dir" value="hosts.webrecs.com:/home/webrecs/${username}/debug/" />
 	
@@ -47,8 +48,11 @@
 	   		<insert path="/" buffer="saveme"/>
 	   		<rename path="configurations"  to="alfresco-configuration" />
 		</xmltask>		
-		<zip destfile="${dist.dir}/${zip.name}">
-			<zipfileset dir="${dist.dir}"/>
+		<zip destfile="${dist.dir}/${zip.name.share}">
+			<zipfileset dir="${dist.dir}" includes="**/web-extension/*" />
+		</zip>
+		<zip destfile="${dist.dir}/${zip.name.alfresco}">
+			<zipfileset dir="${dist.dir}" includes="**/extension/*" />
 		</zip>
 	</target>
 	
